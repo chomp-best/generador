@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Oficial - The Summer Night</title>
+    
+    <!-- Librería para convertir HTML a Imagen -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'anton': ['Anton', 'sans-serif'],
+                        'outfit': ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        'neon-pink': '#ff00de',
+                        'neon-blue': '#00ffff',
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px rgba(255, 0, 222, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(255, 0, 222, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(0, 255, 255, 0.05) 0%, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            overflow-y: auto; /* Permitir scroll si la pantalla es chica */
+            padding: 20px 0;
+        }
+
+        /* Estilos específicos para el ticket */
+        .ticket-container {
+            background: linear-gradient(160deg, #1a1a1a 0%, #0a0a0a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Patrón de ruido sutil */
+        .noise-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Línea de corte (Troquelado) */
+        .cut-line {
+            border-top: 2px dashed rgba(255, 255, 255, 0.15);
+            position: relative;
+            margin: 0 -2px; /* Ajuste fino */
+        }
+        .cut-line::before, .cut-line::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            width: 24px;
+            height: 24px;
+            background-color: #050505; /* Debe coincidir con el fondo del body */
+            border-radius: 50%;
+        }
+        .cut-line::before { left: -12px; }
+        .cut-line::after { right: -12px; }
+
+        /* Efecto holográfico sutil en el borde */
+        .holo-border {
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            padding: 1px;
+            background: linear-gradient(45deg, transparent 40%, rgba(255, 0, 222, 0.5) 50%, transparent 60%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="p-4">
+
+    <!-- Contenedor principal que centra todo -->
+    <div class="flex flex-col md:flex-row items-start gap-8">
+        
+        <!-- ================= EL TICKET (Esto es lo que se descarga) ================= -->
+        <div id="ticket-capture-area" class="relative group mx-auto md:mx-0">
+            
+            <!-- Glow trasero para presentación -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-neon-pink to-purple-600 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+
+            <div class="ticket-container w-[340px] rounded-3xl text-white shadow-2xl relative z-10">
+                <div class="noise-bg"></div>
+                <div class="holo-border"></div>
+
+                <!-- Encabezado -->
+                <div class="pt-8 pb-4 text-center relative">
+                    <!-- CORRECCIÓN: Se cambió inline-block por inline-flex para un centrado vertical más robusto en la captura. Se añadió leading-none y m-0 al párrafo. -->
+                    <div class="inline-flex items-center justify-center px-3 py-1 border border-white/10 rounded-full bg-white/5 backdrop-blur-sm mb-4">
+                        <p class="text-[10px] leading-none tracking-[0.3em] font-bold text-gray-300 uppercase m-0">Official Access Pass</p>
+                    </div>
+                    
+                    <!-- ID agregado aquí para identificarlo en el script -->
+                    <h2 id="ticket-sub-title" class="font-anton text-4xl leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500">
+                        THE SUMMER
+                    </h2>
+                    <h1 class="font-anton text-5xl leading-none text-neon-pink drop-shadow-[0_0_15px_rgba(255,0,222,0.6)] mt-[-5px]">
+                        NIGHT
+                    </h1>
+                </div>
+
+                <!-- SECCIÓN DE DATOS PERSONALES -->
+                <div class="px-6 pb-2">
+                    <div class="relative pl-4 py-2 border-l-2 border-neon-pink bg-white/5 rounded-r-lg">
+                        <p class="text-[9px] text-neon-pink uppercase tracking-widest font-bold mb-1">Titular de la entrada</p>
+                        <h3 id="ticket-name" class="font-anton text-2xl text-white tracking-wide uppercase leading-none mb-1">NOMBRE APELLIDO</h3>
+                        <p id="ticket-dni" class="text-sm text-gray-400 font-mono tracking-wider">DNI: XX.XXX.XXX</p>
+                        
+                        <!-- Brillo decorativo -->
+                        <div class="absolute top-0 right-0 w-8 h-full bg-gradient-to-l from-white/5 to-transparent"></div>
+                    </div>
+                </div>
+
+                <!-- Cuerpo Principal con QR -->
+                <div class="px-6 py-2">
+                    <div class="bg-white rounded-xl p-3 flex gap-4 items-center shadow-inner relative overflow-hidden">
+                        <!-- QR Code generado dinámicamente -->
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TheSummerNight-Verified&color=000000&bgcolor=ffffff" 
+                             alt="QR Acceso" 
+                             class="w-24 h-24 mix-blend-multiply opacity-90 relative z-10">
+                        
+                        <div class="flex-1 text-black relative z-10">
+                            <p class="text-[10px] uppercase font-bold text-gray-500 tracking-wider mb-1">Estado</p>
+                            <div class="flex items-center gap-1 mb-2">
+                                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                <span class="font-bold text-sm tracking-tight">VERIFICADO</span>
+                            </div>
+                            <p class="text-[10px] leading-tight text-gray-600">
+                                Ticket personal e intransferible.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Clave -->
+                <div class="px-8 py-6 space-y-4">
+                    <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                        <div class="text-left">
+                            <p class="text-[10px] text-gray-400 uppercase tracking-widest">Fecha</p>
+                            <p class="font-bold text-xl text-white">SÁB 13 DIC</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] text-gray-400 uppercase tracking-widest">Horario</p>
+                            <p class="font-bold text-xl text-neon-pink drop-shadow-[0_0_8px_rgba(255,0,222,0.4)]">23:59 HS</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-3 opacity-90">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-widest">Ubicación</p>
+                            <p class="text-sm font-semibold">Ubicación Privada</p>
+                            <p class="text-[10px] text-gray-500">(Se envía 24hs antes)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zona de Troquelado / Advertencia -->
+                <div class="relative bg-[#0F0F0F] pb-6 pt-6 mt-2">
+                    <!-- Línea punteada -->
+                    <div class="absolute top-0 left-0 w-full">
+                        <div class="cut-line"></div>
+                    </div>
+
+                    <div class="text-center px-6">
+                        <div class="flex items-center justify-center gap-2 mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-yellow-500 font-bold text-xs tracking-widest uppercase">Validación en Puerta</span>
+                        </div>
+                        <p class="text-sm text-gray-300 font-medium leading-relaxed">
+                            El DNI físico debe coincidir con el <br>
+                            titular impreso en este ticket.
+                        </p>
+                        <p class="text-[10px] text-gray-600 mt-3 uppercase tracking-wider">
+                            Evento +18 &bull; Nos reservamos derecho de admisión
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ================= FIN DEL TICKET ================= -->
+
+
+        <!-- PANEL DE CONTROL (EDICIÓN) -->
+        <div class="w-full max-w-[340px] flex flex-col gap-6 p-6 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-md h-fit">
+            
+            <div class="border-b border-white/10 pb-4">
+                <h3 class="font-anton text-2xl text-white">GENERADOR</h3>
+                <p class="text-xs text-gray-400">Completá los datos del comprador para personalizar el ticket.</p>
+            </div>
+
+            <!-- Inputs -->
+            <div class="space-y-4">
+                <div class="space-y-2">
+                    <label class="text-xs text-neon-pink font-bold uppercase tracking-wider">Nombre Completo</label>
+                    <input type="text" id="input-name" placeholder="Ej: Juan Pérez" oninput="updateTicket()" 
+                           class="w-full bg-black/40 border border-white/20 rounded-lg p-3 text-white focus:outline-none focus:border-neon-pink focus:ring-1 focus:ring-neon-pink transition-all font-outfit uppercase placeholder-gray-600">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs text-neon-pink font-bold uppercase tracking-wider">DNI</label>
+                    <input type="number" id="input-dni" placeholder="Ej: 12345678" oninput="updateTicket()" 
+                           class="w-full bg-black/40 border border-white/20 rounded-lg p-3 text-white focus:outline-none focus:border-neon-pink focus:ring-1 focus:ring-neon-pink transition-all font-outfit font-mono placeholder-gray-600">
+                </div>
+            </div>
+
+            <!-- Botón de Descarga -->
+            <button onclick="downloadTicket()" class="w-full group relative px-8 py-4 bg-white text-black font-bold rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,0,222,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3 mt-2">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100 to-transparent opacity-0 group-hover:opacity-50 w-full h-full skew-x-12 transition-opacity"></div>
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:text-neon-pink transition-colors z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span class="z-10 tracking-wide">DESCARGAR TICKET</span>
+            </button>
+            
+            <p class="text-center text-[10px] text-gray-500">
+                Se descargará como imagen PNG de alta calidad.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // Función para actualizar el ticket en tiempo real
+        function updateTicket() {
+            const inputName = document.getElementById('input-name').value;
+            const inputDni = document.getElementById('input-dni').value;
+
+            const ticketName = document.getElementById('ticket-name');
+            const ticketDni = document.getElementById('ticket-dni');
+
+            // Actualizar textos o volver al placeholder si está vacío
+            ticketName.innerText = inputName ? inputName : 'NOMBRE APELLIDO';
+            
+            // Formatear DNI con puntos si es posible (solo visual)
+            let formattedDni = inputDni;
+            if (inputDni && inputDni.length > 3) {
+                // Regex simple para puntos de mil
+                formattedDni = Number(inputDni).toLocaleString('es-AR');
+            }
+            
+            ticketDni.innerText = inputDni ? `DNI: ${formattedDni}` : 'DNI: XX.XXX.XXX';
+        }
+
+        function downloadTicket() {
+            const ticketElement = document.getElementById('ticket-capture-area');
+            const btn = document.querySelector('button span');
+            const originalText = btn.innerText;
+
+            // Feedback visual
+            btn.innerText = 'GENERANDO...';
+
+            // 1. Clonar el elemento
+            const clone = ticketElement.cloneNode(true);
+            
+            // 2. CORRECCIÓN DEL ERROR DE LA BARRA BLANCA
+            // html2canvas odia "background-clip: text". Lo que hacemos aquí es
+            // buscar ese título específico EN EL CLON y quitarle el gradiente,
+            // poniéndole un color sólido (gris claro) solo para la foto.
+            const titleInClone = clone.querySelector('#ticket-sub-title');
+            if (titleInClone) {
+                // Quitamos las clases que hacen el gradiente y la transparencia
+                titleInClone.classList.remove('text-transparent', 'bg-clip-text', 'bg-gradient-to-b');
+                // Forzamos un color sólido que se vea bien
+                titleInClone.style.color = '#e5e7eb'; // Un gris claro (Tailwind gray-200)
+                titleInClone.style.background = 'transparent'; // Aseguramos que no tenga fondo
+            }
+
+            // 3. Crear contenedor temporal
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.top = '-9999px';
+            tempContainer.style.backgroundColor = 'transparent';
+            
+            // Añadir clon
+            tempContainer.appendChild(clone);
+            document.body.appendChild(tempContainer);
+
+            // Ajustes visuales para la captura
+            const ticketContainer = clone.querySelector('.ticket-container');
+            if (ticketContainer) {
+                ticketContainer.style.background = 'linear-gradient(160deg, #1a1a1a 0%, #0a0a0a 100%)';
+                ticketContainer.style.borderRadius = '1.5rem';
+            }
+
+            // 4. Generar la imagen
+            html2canvas(clone, {
+                scale: 3, 
+                backgroundColor: null,
+                useCORS: true,
+                logging: false,
+                allowTaint: true,
+                width: ticketElement.offsetWidth,
+                height: ticketElement.offsetHeight
+            }).then(canvas => {
+                const link = document.createElement('a');
+                const guestName = document.getElementById('input-name').value.replace(/\s+/g, '_') || 'Invitado';
+                link.download = `Ticket_SummerNight_${guestName}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                btn.innerText = originalText;
+                document.body.removeChild(tempContainer);
+            }).catch(err => {
+                console.error("Error:", err);
+                btn.innerText = originalText;
+                alert("Error al generar. Intenta en PC o usa otro navegador.");
+                if (document.body.contains(tempContainer)) {
+                    document.body.removeChild(tempContainer);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
